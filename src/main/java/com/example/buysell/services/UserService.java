@@ -5,12 +5,14 @@ import com.example.buysell.models.Product;
 import com.example.buysell.models.User;
 import com.example.buysell.models.enums.Role;
 import com.example.buysell.repositories.ImageRepository;
+import com.example.buysell.repositories.ProductRepository;
 import com.example.buysell.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
     private final ImageRepository imageRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -64,12 +67,28 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<Image> getListOfPreviewOfProduct(User user){
-        List<Product> products = user.getProducts();
+    public List<Image> getPreviwOfProducts(List<Product> products){
         List<Image> images = new ArrayList<>();
         for(Product product: products){
             images.add(imageRepository.findById(product.getPreviewImageId()).orElse(null));
         }
         return images;
+    }
+
+    public List<Image> getListOfPreviewOfProduct(User user){
+        List<Product> products = user.getProducts();
+        return getPreviwOfProducts(products);
+    }
+
+
+    public List<Product> getListOfLikedProduct(User user){
+        return productRepository.findByUserLike(user.getId());
+    }
+
+    public void saveLike(User user, Long productId){
+        if(!productRepository.isLikeExists(user.getId(), productId)){
+            productRepository.saveUserLike(user.getId(), productId);
+            user.getLikes().add(productRepository.findById(productId).orElse(null));
+        }
     }
 }

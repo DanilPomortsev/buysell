@@ -40,6 +40,15 @@ public class User implements UserDetails {
     private LocalDateTime dateOfCreated;
 
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "product_like",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> likes = new ArrayList<>();
+
+
     @PrePersist
     private void init() {
         dateOfCreated = LocalDateTime.now();

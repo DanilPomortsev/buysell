@@ -1,7 +1,9 @@
 package com.example.buysell.controllers;
 
 import com.example.buysell.models.Product;
+import com.example.buysell.models.User;
 import com.example.buysell.services.ProductService;
+import com.example.buysell.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +21,14 @@ import java.security.Principal;
 public class ProductController {
     private final ProductService productService;
 
+    private final UserService userService;
+
     @GetMapping("/product/{id}")
-    public String productInfo(@PathVariable long id, Model model){
+    public String productInfo(@RequestParam(name = "like", required = false) Boolean like, @PathVariable long id, Model model, Principal principal){
+        if(like != null && like){
+            User user = productService.getUserByPrincipal(principal);
+            userService.saveLike(user, id);
+        }
         Product product = productService.getProductById(id);
         model.addAttribute("product", product);
         model.addAttribute("images", product.getImages());

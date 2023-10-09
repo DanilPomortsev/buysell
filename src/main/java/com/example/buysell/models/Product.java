@@ -37,6 +37,9 @@ public class Product {
     private User user;
     private LocalDateTime dateOfCreated;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "likes")
+    private List<User> userLike;
+
     @PrePersist
     private void init() {
         dateOfCreated = LocalDateTime.now();

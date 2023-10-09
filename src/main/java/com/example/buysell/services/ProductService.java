@@ -23,8 +23,6 @@ public class ProductService {
     private final ImageRepository imageRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-
-    private List<Product> products = new ArrayList<>();
     public List<Product> listProducts(String title) {
         if (title != null) return productRepository.findByTitle(title);
         return productRepository.findAll();
