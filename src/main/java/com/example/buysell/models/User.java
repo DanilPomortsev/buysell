@@ -7,9 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="users")
@@ -19,36 +17,38 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
     @Column(name = "email", unique = true)
     private String email;
-
     @Column(name = "phone_number")
     private String phoneNumber;
-
     @Column(name = "name")
     private String name;
-
     @Column(name = "active")
     private boolean active;
-
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "image_id")
     private Image avatar;
-
     @Column(name = "password", length = 1000)
     private String password;
-
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+    private List<Product> products = new ArrayList<>();
     private LocalDateTime dateOfCreated;
 
+
     @PrePersist
-    private void init(){
+    private void init() {
         dateOfCreated = LocalDateTime.now();
+    }
+
+    // security
+
+    public boolean isAdmin() {
+        return roles.contains(Role.ROLE_ADMIN);
     }
 
     @Override
