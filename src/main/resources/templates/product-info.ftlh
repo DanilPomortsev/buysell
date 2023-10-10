@@ -14,5 +14,9 @@
 <b>Цена: </b>${product.price}<br>
 <b>Город: </b>${product.city}<br>
 <b>Автор: </b><a href="/user/${product.user.id}">${product.user.name}</a><br>
+<form action="/product/${product.id}?like=true" method="get">
+        <input type="hidden" name="_csrf" value="${_csrf.token}">
+        <input type="submit" value="Добавить в избранное"/>
+</form>
 </body>
 </html>

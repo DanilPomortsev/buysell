@@ -12,6 +12,10 @@
         <input type="hidden" name="_csrf" value="${_csrf.token}">
         <input type="submit" value="Выйти"/>
     </form>
+    <form action="/like" method="get">
+            <input type="hidden" name="_csrf" value="${_csrf.token}">
+            <input type="submit" value="Избранное"/>
+    </form>
     <#if user.isAdmin()>
         <a href="/admin">Панель администратора</a>
     </#if>
