@@ -30,6 +30,7 @@ public class ProductController {
             userService.saveLike(user, id);
         }
         Product product = productService.getProductById(id);
+        model.addAttribute("user", productService.getUserByPrincipal(principal));
         model.addAttribute("product", product);
         model.addAttribute("images", product.getImages());
         return "product-info";

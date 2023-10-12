@@ -22,12 +22,14 @@ public class UserController {
     private final ProductService productService;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model, Principal principal) {
+        model.addAttribute("user", productService.getUserByPrincipal(principal));
         return "login";
     }
 
     @GetMapping("/registration")
-    public String registration() {
+    public String registration(Model model, Principal principal) {
+        model.addAttribute("user", productService.getUserByPrincipal(principal));
         return "registration";
     }
 
@@ -40,7 +42,8 @@ public class UserController {
 
 
     @GetMapping("/user/{user}")
-    public String userInfo(@PathVariable("user") User user, Model model) {
+    public String userInfo(@PathVariable("user") User user, Model model, Principal principal) {
+        model.addAttribute("userByPrincipal", productService.getUserByPrincipal(principal));
         model.addAttribute("user", user);
         model.addAttribute("products", user.getProducts());
         model.addAttribute("images", userService.getListOfPreviewOfProduct(user));
