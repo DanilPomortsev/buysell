@@ -10,11 +10,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfig {
+
+    public class RefererRedirectionAuthenticationSuccessHandler extends
+            SimpleUrlAuthenticationSuccessHandler {
+        public RefererRedirectionAuthenticationSuccessHandler() {
+            super();
+            setUseReferer(true);
+        }
+    }
 
     private final CustomUserDetailsService userDetailService;
 
@@ -23,13 +33,13 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/registration", "/images/**").permitAll()
-                        .requestMatchers("/like/**", "/product/**")
+                        .requestMatchers("/like/**", "/product/**", "/login")
                         .hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
-                        .permitAll()
+                        .loginPage("/login").permitAll()
+                        .defaultSuccessUrl("/",true)
                 )
                 .logout((logout) -> logout.permitAll());
 

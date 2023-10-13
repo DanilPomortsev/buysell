@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
@@ -26,6 +27,14 @@ public class UserController {
         model.addAttribute("user", productService.getUserByPrincipal(principal));
         return "login";
     }
+
+    @PostMapping("/login")
+    public String succesLogin(@RequestParam(name = "title", required = false) String title, Principal principal, Model model) {
+        model.addAttribute("products", productService.listProducts(title));
+        model.addAttribute("user", productService.getUserByPrincipal(principal));
+        return "products";
+    }
+
 
     @GetMapping("/registration")
     public String registration(Model model, Principal principal) {
