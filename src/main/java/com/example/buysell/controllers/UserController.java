@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -49,6 +51,26 @@ public class UserController {
         return "redirect:/login";
     }
 
+    @GetMapping("/profile")
+    public String userProfile(Model model, Principal principal){
+        model.addAttribute("user", productService.getUserByPrincipal(principal));
+        return "profile";
+    }
+
+    @PostMapping("/avatar")
+    public String avatar(@RequestParam("file") MultipartFile file, Model model, Principal principal) throws IOException {
+        User user = productService.getUserByPrincipal(principal);
+        userService.addAvatar(file, user);
+        model.addAttribute("user", user);
+        return "redirect:/profile";
+    }
+    @GetMapping("/my/products")
+    public String myProducts(Model model, Principal principal){
+        User user = productService.getUserByPrincipal(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("products", user.getProducts());
+        return "my-products";
+    }
 
     @GetMapping("/user/{user}")
     public String userInfo(@PathVariable("user") User user, Model model, Principal principal) {
@@ -67,6 +89,5 @@ public class UserController {
         model.addAttribute("products", likedProducts);
         model.addAttribute("images", userService.getPreviwOfProducts(likedProducts));
         return "user-like";
-
     }
 }

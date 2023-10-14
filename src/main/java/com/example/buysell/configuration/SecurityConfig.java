@@ -17,23 +17,14 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfig {
-
-    public class RefererRedirectionAuthenticationSuccessHandler extends
-            SimpleUrlAuthenticationSuccessHandler {
-        public RefererRedirectionAuthenticationSuccessHandler() {
-            super();
-            setUseReferer(true);
-        }
-    }
-
     private final CustomUserDetailsService userDetailService;
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/registration", "/images/**").permitAll()
-                        .requestMatchers("/like/**", "/product/**", "/login")
+                        .requestMatchers("/", "/registration", "/images/**", "/login").permitAll()
+                        .requestMatchers("/like/**", "/product/**")
                         .hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
                         .anyRequest().authenticated()
                 )

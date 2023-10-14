@@ -60,6 +60,8 @@ public class User implements UserDetails {
         return roles.contains(Role.ROLE_ADMIN);
     }
 
+    public boolean isNonAvatar(){return avatar==null;}
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;

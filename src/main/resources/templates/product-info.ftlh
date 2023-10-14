@@ -42,8 +42,14 @@
 
     <hr>
     <p style="text-align: center">
-        <a href="/user/${product.user.id}">
-            <img src="/static/images/avatar.png" alt="mdo" width="32" height="32" class="rounded-circle"> ${product.user.name}
-        </a>
+        <#if product.user.isNonAvatar()>
+            <a href="/user/${product.user.id}">
+                <img src="/static/images/avatar.png" alt="mdo" width="32" height="32" class="rounded-circle"> ${product.user.name}
+            </a>
+        <#else>
+            <a href="/user/${product.user.id}">
+                <img src="/images/${product.user.avatar.id}" alt="mdo" width="32" height="32" class="rounded-circle"> ${product.user.name}
+            </a>
+        </#if>
     </p>
 </@t.template>

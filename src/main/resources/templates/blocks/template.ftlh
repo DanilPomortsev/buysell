@@ -23,8 +23,11 @@
             <#if user.email??>
                 <div class="dropdown text-end">
                     <a href="/profile">
-                        <img src="/static/images/avatar.png" alt="mdo"
-                             width="32" height="32" class="rounded-circle">
+                        <#if user.isNonAvatar()>
+                            <img src="/static/images/avatar.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                        <#else>
+                            <img src="/images/${user.avatar.id}" alt="mdo" width="32" height="32" class="rounded-circle">
+                        </#if>
                     </a>
                 </div>
             <#else>

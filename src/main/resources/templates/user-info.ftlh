@@ -3,8 +3,11 @@
     <h1 style="text-align: center">Информация о пользователе</h1>
     <hr>
     <div style="text-align: center">
-            <img src="/static/images/avatar.png"
-                 style="border:2px solid black; border-radius: 20px" height="120">
+        <#if user.isNonAvatar()>
+            <img src="/static/images/avatar.png" style="border:2px solid black; border-radius: 20px" height="120">
+        <#else>
+            <img src="/images/${user.avatar.id}" style="border:2px solid black; border-radius: 20px" height="120">
+        </#if>
         <br>
         <br>
         <h2>${user.name}</h2>

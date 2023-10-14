@@ -20,7 +20,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class ProductService {
-    private final ImageRepository imageRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     public List<Product> listProducts(String title) {
