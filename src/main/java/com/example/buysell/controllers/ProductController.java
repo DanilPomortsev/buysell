@@ -24,16 +24,27 @@ public class ProductController {
     private final UserService userService;
 
     @GetMapping("/product/{id}")
-    public String productInfo(@RequestParam(name = "like", required = false) Boolean like, @PathVariable long id, Model model, Principal principal){
-        if(like != null && like){
-            User user = productService.getUserByPrincipal(principal);
-            userService.saveLike(user, id);
-        }
+    public String productInfo(@PathVariable Long id, Model model, Principal principal){
+        User user = productService.getUserByPrincipal(principal);
         Product product = productService.getProductById(id);
-        model.addAttribute("user", productService.getUserByPrincipal(principal));
+        model.addAttribute("isLiked", userService.isLiked(user.getId(), product.getId()));
+        model.addAttribute("user", user);
         model.addAttribute("product", product);
         model.addAttribute("images", product.getImages());
         return "product-info";
+    }
+
+    @PostMapping("/product/{id}")
+    public String likeProduct(@RequestParam(name = "like", required = true) Boolean like,
+                              @PathVariable Long id, Model model, Principal principal){
+        User user = productService.getUserByPrincipal(principal);
+        if(like){
+            userService.saveLike(user, id);
+        }
+        else{
+              userService.deleteIfExistsLike(user, id);
+        }
+        return "redirect:/product/{id}";
     }
 
     @GetMapping("/")

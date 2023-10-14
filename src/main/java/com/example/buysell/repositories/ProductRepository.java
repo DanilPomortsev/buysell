@@ -19,6 +19,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Transactional
     @Query(value = "INSERT INTO product_like (user_id, product_id) VALUES (:userId, :productId)", nativeQuery = true)
     void saveUserLike(@Param("userId") Long userId, @Param("productId") Long productId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM product_like WHERE product_like.user_id = :user_id AND product_like.product_id = :product_id", nativeQuery = true)
+    void deleteUserLike(@Param("user_id") Long userId, @Param("product_id") Long productId);
     List<Product> findByTitle(String title);
 
     @Query("SELECT COUNT(p) > 0 FROM Product p JOIN p.userLike u WHERE p.id = :productId AND u.id = :userId")

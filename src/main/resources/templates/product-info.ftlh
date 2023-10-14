@@ -52,4 +52,22 @@
             </a>
         </#if>
     </p>
+
+    <p style="text-align: left">
+        <#if isLiked>
+            <form action="/product/${product.id}?like=false" method="post">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                <button type="submit" style="border: none; background: none; padding: 0;">
+                    <img src="/static/images/active-like.png" width="32" height="32">
+                </button>
+            </form>
+        <#else>
+            <form action="/product/${product.id}?like=true" method="post">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                <button type="submit" style="border: none; background: none; padding: 0;">
+                    <img src="/static/images/non-active-like.jpg" width="32" height="32">
+                </button>
+            </form>
+        </#if>
+    </p>
 </@t.template>

@@ -117,4 +117,16 @@ public class UserService {
         log.info("Saving new Avatar of user {}", user.getEmail());
         User userFromDb = userRepository.save(user);
     }
+
+    public boolean isLiked(Long userId, Long productId){
+        return productRepository.isLikeExists(userId, productId);
+    }
+
+    public boolean deleteIfExistsLike(User user,Long productId){
+        if(productRepository.isLikeExists(user.getId(),productId)){
+            productRepository.deleteUserLike(user.getId(),productId);
+            return true;
+        }
+        return false;
+    }
 }

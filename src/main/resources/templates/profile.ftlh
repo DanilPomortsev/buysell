@@ -36,7 +36,7 @@
             <button type="submit" style="width: 100%" class="btn btn-dark">Изменить</button>
         </form>
 
-        <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/my/products">
+        <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/like">
             Избранные товары
         </a>
 
