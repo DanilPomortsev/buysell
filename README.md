@@ -124,7 +124,12 @@
 
 # СУБД 
 
-- PostgreSQL 
+- PostgreSQL
+
+
+## Схема базы данных
+![Логотип](DataBaseScheme.png)
+
 
 # Тестирование: 
 
