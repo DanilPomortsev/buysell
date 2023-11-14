@@ -90,7 +90,7 @@
 ![Логотип](https://i.imgur.com/2Yzq3s3.jpg)
 
 ### Панель авторизации пользователя 
-![Логотип](https://i.imgur.com/4wWs07s.jpg)
+![Логотип](https://i.imgur.com/DpzelCS.jpeg)
 
 ### Профиль пользователя 
 ![Логотип](https://i.imgur.com/Q7JadT3.jpg)
