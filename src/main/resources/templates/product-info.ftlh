@@ -38,7 +38,7 @@
     <hr>
     <p><h1 style="text-align: center">${product.title} | ${product.price} ₽</h1></p>
     <p style="text-align: center">${product.description}</p>
-    <p style="text-align: center">Номер телефона продавца: <b>${product.user.phoneNumber}</b></p>
+    <p style="text-align: center">Номер телефона продавца: <b>${product.user.sellerData.phone}</b></p>
 
     <hr>
     <p style="text-align: center">

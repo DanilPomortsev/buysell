@@ -5,7 +5,6 @@ import com.example.buysell.models.Product;
 import com.example.buysell.models.User;
 import com.example.buysell.models.enums.Role;
 import com.example.buysell.repositories.ImageRepository;
-import com.example.buysell.repositories.ProductRepository;
 import com.example.buysell.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final ProductRepository productRepository;
+    private final ProductService productService;
     private final ImageRepository imageRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -33,65 +31,24 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setPassword(user.getPassword());
         user.getRoles().add(Role.ROLE_USER);
-        //user.getRoles().add(Role.ROLE_ADMIN);
+        user.getRoles().add(Role.ROLE_ADMIN);
         log.info("Saving new User with email: {}", email);
         userRepository.save(user);
         return true;
     }
 
-    public void banUser(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user != null) {
-            if (user.isActive()) {
-                user.setActive(false);
-                log.info("Ban user with id = {}; email: {}", user.getId(), user.getEmail());
-            } else {
-                user.setActive(true);
-                log.info("Unban user with id = {}; email: {}", user.getId(), user.getEmail());
-            }
-        }
-        userRepository.save(user);
-    }
-
-    public void changeUserRoles(User user, Map<String, String> form) {
-        Set<String> roles =
-                Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-        user.getRoles().clear();
-        for (String key : form.keySet()) {
-            if (roles.contains(key)) {
-                user.getRoles().add(Role.valueOf(key));
-            }
-        }
-        userRepository.save(user);
-    }
     public List<User> list() {
         return userRepository.findAll();
     }
 
-    public List<Image> getPreviwOfProducts(List<Product> products){
-        List<Image> images = new ArrayList<>();
-        for(Product product: products){
-            images.add(imageRepository.findById(product.getPreviewImageId()).orElse(null));
-        }
-        return images;
-    }
-
-    public List<Image> getListOfPreviewOfProduct(User user){
-        List<Product> products = user.getProducts();
-        return getPreviwOfProducts(products);
-    }
-
-
     public List<Product> getListOfLikedProduct(User user){
-        return productRepository.findByUserLike(user.getId());
+        return productService.findByUserLike(user);
     }
 
     public void saveLike(User user, Long productId){
-        if(!productRepository.isLikeExists(user.getId(), productId)){
-            productRepository.saveUserLike(user.getId(), productId);
-            user.getLikes().add(productRepository.findById(productId).orElse(null));
+        if(!productService.isLikeExists(user, productId)){
+            productService.saveUserLike(user, productId);
+            user.getLikes().add(productService.findById(productId));
         }
     }
 
@@ -118,15 +75,23 @@ public class UserService {
         User userFromDb = userRepository.save(user);
     }
 
-    public boolean isLiked(Long userId, Long productId){
-        return productRepository.isLikeExists(userId, productId);
+    public boolean isLiked(User user, Long productId){
+        return productService.isLikeExists(user, productId);
     }
 
     public boolean deleteIfExistsLike(User user,Long productId){
-        if(productRepository.isLikeExists(user.getId(),productId)){
-            productRepository.deleteUserLike(user.getId(),productId);
+        if(productService.isLikeExists(user,productId)){
+            productService.deleteUserLike(user,productId);
             return true;
         }
         return false;
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
     }
 }

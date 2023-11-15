@@ -2,6 +2,7 @@ package com.example.buysell.controllers;
 
 import com.example.buysell.models.Product;
 import com.example.buysell.models.User;
+import com.example.buysell.services.AuthService;
 import com.example.buysell.services.ProductService;
 import com.example.buysell.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +22,15 @@ import java.security.Principal;
 public class ProductController {
     private final ProductService productService;
 
+    private final AuthService authService;
+
     private final UserService userService;
 
     @GetMapping("/product/{id}")
     public String productInfo(@PathVariable Long id, Model model, Principal principal){
-        User user = productService.getUserByPrincipal(principal);
+        User user = authService.getUserByPrincipal(principal);
         Product product = productService.getProductById(id);
-        model.addAttribute("isLiked", userService.isLiked(user.getId(), product.getId()));
+        model.addAttribute("isLiked", userService.isLiked(user, product.getId()));
         model.addAttribute("user", user);
         model.addAttribute("product", product);
         model.addAttribute("images", product.getImages());
@@ -37,7 +40,7 @@ public class ProductController {
     @PostMapping("/product/{id}")
     public String likeProduct(@RequestParam(name = "like", required = true) Boolean like,
                               @PathVariable Long id, Model model, Principal principal){
-        User user = productService.getUserByPrincipal(principal);
+        User user = authService.getUserByPrincipal(principal);
         if(like){
             userService.saveLike(user, id);
         }
@@ -50,7 +53,7 @@ public class ProductController {
     @GetMapping("/")
     public String products(@RequestParam(name = "title", required = false) String title, Principal principal, Model model) {
         model.addAttribute("products", productService.listProducts(title));
-        model.addAttribute("user", productService.getUserByPrincipal(principal));
+        model.addAttribute("user", authService.getUserByPrincipal(principal));
         return "products";
     }
 

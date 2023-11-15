@@ -2,6 +2,9 @@ package com.example.buysell.controllers;
 
 import com.example.buysell.models.User;
 import com.example.buysell.models.enums.Role;
+import com.example.buysell.services.AdminService;
+import com.example.buysell.services.AuthService;
+import com.example.buysell.services.ProductService;
 import com.example.buysell.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.Map;
 
 @Controller
@@ -19,16 +23,19 @@ import java.util.Map;
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class AdminController {
     private final UserService userService;
+    private final AuthService authService;
+    private final AdminService adminService;
 
     @GetMapping("/admin")
-    public String admin(Model model) {
+    public String admin(Model model, Principal principal) {
         model.addAttribute("users", userService.list());
+        model.addAttribute("user", authService.getUserByPrincipal(principal));
         return "admin";
     }
 
     @PostMapping("/admin/user/ban/{id}")
     public String userBan(@PathVariable("id") Long id) {
-        userService.banUser(id);
+        adminService.banUser(id);
         return "redirect:/admin";
     }
 
@@ -41,8 +48,7 @@ public class AdminController {
 
     @PostMapping("/admin/user/edit")
     public String userEdit(@RequestParam("userId") User user, @RequestParam Map<String, String> form) {
-        userService.changeUserRoles(user, form);
+        adminService.changeUserRoles(user, form);
         return "redirect:/admin";
     }
 }
-//something

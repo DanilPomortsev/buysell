@@ -15,8 +15,11 @@
         <br>
         Электоронная почта: <b>${user.email}</b>
         <br>
-        Номер телефона: <b>${user.phoneNumber}</b>
-        <br>
+        <#if user.isSeller()>
+            Номер телефона: <b>${user.sellerData.phone}</b><br>
+            Адресс: <b>${user.sellerData.address}</b><br>
+            Контактная ссылка: <b>${user.sellerData.contact}</b><br>
+        </#if>
         <br>
         <#if user.isAdmin()>
             <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/admin">
@@ -40,9 +43,20 @@
             Избранные товары
         </a>
 
-        <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/my/products">
-            Мои товары
-        </a>
+        <#if user.isNotSeller()>
+            <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/seller-data">
+                Стать продавцом
+            </a>
+        </#if>
+
+        <#if user.isSeller()>
+            <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/seller-data">
+                Данные продавца
+            </a>
+            <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/my/products">
+                Мои товары
+            </a>
+        </#if>
 
         <form action="/logout" method="post">
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>

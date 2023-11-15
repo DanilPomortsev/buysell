@@ -1,6 +1,6 @@
 <#import "blocks/template.ftlh" as t>
 <@t.template user>
-    `<h1 style="text-align: center">Панель администратора</h1><hr>
+    <h1 style="text-align: center">Панель администратора</h1><hr>
     <table class="table table-hover table-dark">
         <tr>
             <th scope="col">Email</th>
@@ -14,7 +14,11 @@
         <#list users as user>
             <tr>
                 <th>${user.email}</th>
-                <th>${user.phoneNumber}</th>
+                <#if user.isSeller()>
+                    <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/admin">
+                        Номер телефона: <b>${user.sellerData.phone}</b>
+                    </a><br>
+                </#if>
                 <th><#if user.active>true<#else>false</#if></th>
                 <th><#list user.roles as role>${role}</#list></th>
                 <th>

@@ -19,8 +19,7 @@ public class User implements UserDetails {
     private Long id;
     @Column(name = "email", unique = true)
     private String email;
-    @Column(name = "phone_number")
-    private String phoneNumber;
+
     @Column(name = "name")
     private String name;
     @Column(name = "active")
@@ -28,6 +27,7 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "image_id")
     private Image avatar;
+
     @Column(name = "password", length = 1000)
     private String password;
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -40,6 +40,11 @@ public class User implements UserDetails {
     private List<Product> products = new ArrayList<>();
     private LocalDateTime dateOfCreated;
 
+    @OneToOne(
+            mappedBy = "user", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private SellerData sellerData;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
@@ -59,6 +64,14 @@ public class User implements UserDetails {
 
     public boolean isAdmin() {
         return roles.contains(Role.ROLE_ADMIN);
+    }
+
+    public boolean isSeller() {
+        return roles.contains(Role.ROLE_SELLER);
+    }
+
+    public boolean isNotSeller() {
+        return !roles.contains(Role.ROLE_SELLER);
     }
 
     public boolean isNonAvatar(){return avatar==null;}
@@ -92,4 +105,15 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return active;
     }
+
+    @Override
+    public String toString() {
+        return "User";
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password);
+    }
+
 }

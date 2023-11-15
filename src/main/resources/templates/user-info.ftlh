@@ -12,7 +12,11 @@
         <br>
         <h2>${user.name}</h2>
         <br>
-        Номер телефона: <b>${user.phoneNumber}</b>
+        <#if user.isSeller()>
+            Номер телефона: <b>${user.sellerData.phone}</b><br>
+            Адресс: <b>${user.sellerData.address}</b><br>
+            Контактная ссылка: <b>${user.sellerData.contact}</b><br>
+        </#if>
     </div>
     <br>
     <hr>

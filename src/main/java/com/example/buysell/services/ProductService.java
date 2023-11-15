@@ -3,9 +3,7 @@ package com.example.buysell.services;
 import com.example.buysell.models.Image;
 import com.example.buysell.models.Product;
 import com.example.buysell.models.User;
-import com.example.buysell.repositories.ImageRepository;
 import com.example.buysell.repositories.ProductRepository;
-import com.example.buysell.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,14 +19,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+
+    private final ImageService imageService;
+
+    private final AuthService authService;
     public List<Product> listProducts(String title) {
         if (title != null) return productRepository.findByTitle(title);
         return productRepository.findAll();
     }
 
     public void saveProduct(Principal principal, Product product, MultipartFile file1, MultipartFile file2, MultipartFile file3) throws  IOException {
-        product.setUser(getUserByPrincipal(principal));
+        product.setUser(authService.getUserByPrincipal(principal));
         Image  image1;
         Image  image2;
         Image  image3;
@@ -70,9 +71,36 @@ public class ProductService {
         image.setBytes(file.getBytes());
         return image;
     }
+    public List<Image> getPreviewOfProducts(List<Product> products){
+        List<Image> images = new ArrayList<>();
+        for(Product product: products){
+            images.add(imageService.findById(product));
+        }
+        return images;
+    }
 
-    public User getUserByPrincipal(Principal principal) {
-        if (principal == null) return new User();
-        return userRepository.findByEmail(principal.getName());
+    public List<Image> getListOfPreviewOfProduct(User user){
+        List<Product> products = user.getProducts();
+        return getPreviewOfProducts(products);
+    }
+
+    public List<Product> findByUserLike(User user){
+        return productRepository.findByUserLike(user.getId());
+    }
+
+    public boolean isLikeExists(User user, Long productId){
+        return productRepository.isLikeExists(user.getId(), productId);
+    }
+
+    public void saveUserLike(User user, Long productId){
+        productRepository.saveUserLike(user.getId(), productId);
+    }
+
+    public Product findById(Long productId){
+        return productRepository.findById(productId).orElse(null);
+    }
+
+    public void deleteUserLike(User user,Long productId){
+        productRepository.deleteUserLike(user.getId(),productId);
     }
 }
