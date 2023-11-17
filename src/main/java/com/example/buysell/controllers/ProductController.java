@@ -38,7 +38,7 @@ public class ProductController {
     }
 
     @PostMapping("/product/{id}")
-    public String likeProduct(@RequestParam(name = "like", required = true) Boolean like,
+    public String likeProduct(@RequestParam(name = "like") Boolean like,
                               @PathVariable Long id, Model model, Principal principal){
         User user = authService.getUserByPrincipal(principal);
         if(like){
@@ -52,7 +52,7 @@ public class ProductController {
 
     @GetMapping("/")
     public String products(@RequestParam(name = "title", required = false) String title, Principal principal, Model model) {
-        model.addAttribute("products", productService.listProducts(title));
+        model.addAttribute("products", productService.listActiveProducts(title));
         model.addAttribute("user", authService.getUserByPrincipal(principal));
         return "products";
     }
@@ -61,12 +61,47 @@ public class ProductController {
     public String createProduct(@RequestParam("file1") MultipartFile file1, @RequestParam("file2") MultipartFile file2
                                 , @RequestParam("file3") MultipartFile file3, Product product, Principal principal) throws IOException {
         productService.saveProduct(principal, product, file1, file2, file3);
-        return "redirect:/";
+        return "redirect:/my/products";
     }
 
     @PostMapping("/product/delete/{id}")
     public String deleteProduct(@PathVariable long id){
         productService.deleteProduct(id);
         return "redirect:/";
+    }
+
+    @PostMapping("/product/change-name/{id}")
+    public String productChangeName(@PathVariable long id, @RequestParam(name = "newName") String newName){
+        Product product = productService.findById(id);
+        productService.changeName(product, newName);
+        return "redirect:/my/product/{id}";
+    }
+    @PostMapping("/product/change-price/{id}")
+    public String productChangePrice(@PathVariable long id, @RequestParam(name = "newPrice") int newPrice){
+        Product product = productService.findById(id);
+        productService.changePrice(product, newPrice);
+        return "redirect:/my/product/{id}";
+    }
+
+    @PostMapping("/product/change-city/{id}")
+    public String productChangeCity(@PathVariable long id, @RequestParam(name = "newCity") String newCity){
+        Product product = productService.findById(id);
+        productService.changeCity(product, newCity);
+        return "redirect:/my/product/{id}";
+    }
+
+    @PostMapping("/product/change-description/{id}")
+    public String productChangeDescription(@PathVariable long id, @RequestParam(name = "newDescription") String newDescription){
+        Product product = productService.findById(id);
+        productService.changeDescription(product, newDescription);
+        return "redirect:/my/product/{id}";
+    }
+
+    @PostMapping("/product/change-photos/{id}")
+    public String productChangePhotos(@PathVariable long id, @RequestParam("file1") MultipartFile file1,
+                                      @RequestParam("file2") MultipartFile file2, @RequestParam("file3") MultipartFile file3) throws IOException {
+        Product product = productService.findById(id);
+        productService.changePhotos(product, file1, file2, file3);
+        return "redirect:/my/product/{id}";
     }
 }

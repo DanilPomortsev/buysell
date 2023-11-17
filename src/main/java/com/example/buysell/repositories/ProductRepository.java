@@ -15,6 +15,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p JOIN p.userLike u WHERE u.id= :id")
     List<Product> findByUserLike(@Param("id") Long id);
 
+    @Query("SELECT p FROM Product p JOIN p.productAdminInfo pa WHERE pa.moderate = false")
+    List<Product> findProductsByModerationStatus();
+
+    @Query("SELECT p FROM Product p WHERE p.active = true")
+    List<Product> findActiveProducts();
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO product_like (user_id, product_id) VALUES (:userId, :productId)", nativeQuery = true)

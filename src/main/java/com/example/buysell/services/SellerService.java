@@ -19,11 +19,12 @@ public class SellerService {
     private final UserService userService;
 
     public void becomeSeller(User user, SellerDataEndpoint sellerData){
-        SellerData sellerDataDB = new SellerData();
+        SellerData sellerDataDB;
         if(user.isSeller()){
             sellerDataDB = sellerDataRepository.findByUser(user);
         }
         else {
+            sellerDataDB = new SellerData();
             user.getRoles().add(Role.ROLE_SELLER);
         }
         sellerDataDB.setAddress(sellerData.getAddress());

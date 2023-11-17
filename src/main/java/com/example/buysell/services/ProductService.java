@@ -2,6 +2,7 @@ package com.example.buysell.services;
 
 import com.example.buysell.models.Image;
 import com.example.buysell.models.Product;
+import com.example.buysell.models.ProductAdminInfo;
 import com.example.buysell.models.User;
 import com.example.buysell.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,33 @@ public class ProductService {
 
     private final ImageService imageService;
 
+    private final ProductAdminInfoService productAdminInfoService;
+
     private final AuthService authService;
     public List<Product> listProducts(String title) {
         if (title != null) return productRepository.findByTitle(title);
         return productRepository.findAll();
+    }
+
+    public List<Product> listActiveProducts(String title) {
+        if (title != null) return productRepository.findByTitle(title);
+        return productRepository.findActiveProducts();
+    }
+
+    public List<Product> listUnpmoderateProducts() {
+        return productRepository.findProductsByModerationStatus();
+    }
+
+    public void successfulModerate(Product product){
+        product.getProductAdminInfo().setModerate(true);
+        product.setActive(true);
+        productRepository.save(product);
+    }
+
+    public void unsuccessfulModerate(Product product, String adminMessage){
+        productAdminInfoService.deactivateProduct(product.getProductAdminInfo(), adminMessage);
+        product.setActive(false);
+        productRepository.save(product);
     }
 
     public void saveProduct(Principal principal, Product product, MultipartFile file1, MultipartFile file2, MultipartFile file3) throws  IOException {
@@ -34,24 +58,31 @@ public class ProductService {
         Image  image2;
         Image  image3;
         if(file1.getSize() != 0){
-            image1 = toImageEntity(file1);
+            image1 = imageService.toImageEntity(file1);
             image1.setPreviewImage(true);
             product.addImageToProduct(image1);
         }
         if(file2.getSize() != 0){
-            image2 = toImageEntity(file2);
-            image2.setPreviewImage(true);
+            image2 = imageService.toImageEntity(file2);
             product.addImageToProduct(image2);
         }
         if(file3.getSize() != 0){
-            image3 = toImageEntity(file3);
-            image3.setPreviewImage(true);
+            image3 = imageService.toImageEntity(file3);
             product.addImageToProduct(image3);
         }
+
+        ProductAdminInfo productAdminInfo = new ProductAdminInfo();
+
+        product.setActive(false);
+        product.setProductAdminInfo(productAdminInfo);
         log.info("Saving new Product. Title: {}; Author email: {}", product.getTitle(), product.getUser().getEmail());
         Product productFromDb = productRepository.save(product);
         productFromDb.setPreviewImageId(productFromDb.getImages().get(0).getId());
         productRepository.save(product);
+
+        productAdminInfo.setProduct(product);
+        productAdminInfo.setModerate(false);
+        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
     }
 
     public void deleteProduct(Long id) {
@@ -62,15 +93,6 @@ public class ProductService {
         return productRepository.findById(id).orElse(null);
     }
 
-    private Image toImageEntity(MultipartFile file) throws IOException{
-        Image image = new Image();
-        image.setName(file.getName());
-        image.setOriginalFileName(file.getOriginalFilename());
-        image.setContentType(file.getContentType());
-        image.setSize(file.getSize());
-        image.setBytes(file.getBytes());
-        return image;
-    }
     public List<Image> getPreviewOfProducts(List<Product> products){
         List<Image> images = new ArrayList<>();
         for(Product product: products){
@@ -102,5 +124,64 @@ public class ProductService {
 
     public void deleteUserLike(User user,Long productId){
         productRepository.deleteUserLike(user.getId(),productId);
+    }
+
+    public void changeName(Product product, String newName){
+        product.setTitle(newName);
+        ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
+        productAdminInfo.setModerate(false);
+        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
+        productRepository.save(product);
+    }
+
+    public void changePrice(Product product, int newPrice){
+        product.setPrice(newPrice);
+        ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
+        productAdminInfo.setModerate(false);
+        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
+        productRepository.save(product);
+    }
+
+    public void changeCity(Product product, String newCity){
+        product.setCity(newCity);
+        ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
+        productAdminInfo.setModerate(false);
+        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
+        productRepository.save(product);
+    }
+
+    public void changeDescription(Product product, String newDescription){
+        product.setDescription(newDescription);
+        ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
+        productAdminInfo.setModerate(false);
+        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
+        productRepository.save(product);
+    }
+
+    public void changePhotos(Product product, MultipartFile file1, MultipartFile file2, MultipartFile file3) throws IOException {
+        Image  image1;
+        Image  image2;
+        Image  image3;
+        List<Image> productImages = product.getImages();
+        imageService.deleteImages(productImages);
+        productImages.removeAll(productImages);
+        if(file1.getSize() != 0){
+            image1 = imageService.toImageEntity(file1);
+            image1.setPreviewImage(true);
+            product.addImageToProduct(image1);
+        }
+        if(file2.getSize() != 0){
+            image2 = imageService.toImageEntity(file2);
+            product.addImageToProduct(image2);
+        }
+        if(file3.getSize() != 0){
+            image3 = imageService.toImageEntity(file3);
+            product.addImageToProduct(image3);
+        }
+
+        ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
+        productAdminInfo.setModerate(false);
+        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
+        productRepository.save(product);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.buysell.controllers;
 
+import com.example.buysell.models.Product;
 import com.example.buysell.models.User;
 import com.example.buysell.models.enums.Role;
 import com.example.buysell.services.AdminService;
@@ -26,11 +27,44 @@ public class AdminController {
     private final AuthService authService;
     private final AdminService adminService;
 
+    private final ProductService productService;
+
     @GetMapping("/admin")
     public String admin(Model model, Principal principal) {
         model.addAttribute("users", userService.list());
         model.addAttribute("user", authService.getUserByPrincipal(principal));
         return "admin";
+    }
+
+    @GetMapping("/moderation")
+    public String moderation(Model model, Principal principal) {
+        model.addAttribute("products", productService.listUnpmoderateProducts());
+        model.addAttribute("user", authService.getUserByPrincipal(principal));
+        return "moderation-products";
+    }
+
+    @GetMapping("/moderation/product/{id}")
+    public String moderation(@PathVariable Long id, Model model, Principal principal) {
+        User user = authService.getUserByPrincipal(principal);
+        Product product = productService.getProductById(id);
+        model.addAttribute("user", user);
+        model.addAttribute("product", product);
+        model.addAttribute("images", product.getImages());
+        return "moderate-product-info";
+    }
+
+    @PostMapping("/moderation/product/{id}")
+    public String moderation(@PathVariable Long id, Model model, Principal principal,
+                             @RequestParam(name = "moderateResult") Boolean moderateResult,
+                             @RequestParam(name = "deactivateReason", required = false) String deactivateReason) {
+        Product product = productService.getProductById(id);
+        if(moderateResult){
+            productService.successfulModerate(product);
+        }
+        else {
+            productService.unsuccessfulModerate(product,deactivateReason);
+        }
+        return "redirect:/moderation";
     }
 
     @PostMapping("/admin/user/ban/{id}")

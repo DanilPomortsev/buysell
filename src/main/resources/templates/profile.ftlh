@@ -25,6 +25,9 @@
             <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/admin">
                 Панель администратора
             </a><br>
+            <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/moderation">
+                Модерация объявлений
+            </a><br>
         </#if>
 
         <form action="/avatar" method="post" enctype="multipart/form-data">

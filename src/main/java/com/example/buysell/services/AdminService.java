@@ -1,5 +1,6 @@
 package com.example.buysell.services;
 
+import com.example.buysell.models.Product;
 import com.example.buysell.models.User;
 import com.example.buysell.models.enums.Role;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class AdminService {
     private final UserService userService;
 
+    //деактивировать все объявления
     public void banUser(Long id) {
         User user = userService.findById(id);
         if (user != null) {
