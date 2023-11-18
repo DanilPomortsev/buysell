@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -31,7 +32,8 @@ public class ImageService {
         return image;
     }
 
-    public void deleteImages(List<Image> image){
-        imageRepository.deleteAll(image);
+    public void deleteImages(List<Image> images){
+        //колхоз нужно ещё удалять
+        images.forEach(image -> image.setProduct(null));
     }
 }

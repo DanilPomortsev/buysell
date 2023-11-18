@@ -14,11 +14,6 @@
         <#list users as user>
             <tr>
                 <th>${user.email}</th>
-                <#if user.isSeller()>
-                    <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/admin">
-                        Номер телефона: <b>${user.sellerData.phone}</b>
-                    </a><br>
-                </#if>
                 <th><#if user.active>true<#else>false</#if></th>
                 <th><#list user.roles as role>${role}</#list></th>
                 <th>

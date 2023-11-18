@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -129,6 +130,7 @@ public class ProductService {
     public void changeName(Product product, String newName){
         product.setTitle(newName);
         ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
+        product.setActive(false);
         productAdminInfo.setModerate(false);
         productAdminInfoService.saveProductAdminInfo(productAdminInfo);
         productRepository.save(product);
@@ -137,6 +139,7 @@ public class ProductService {
     public void changePrice(Product product, int newPrice){
         product.setPrice(newPrice);
         ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
+        product.setActive(false);
         productAdminInfo.setModerate(false);
         productAdminInfoService.saveProductAdminInfo(productAdminInfo);
         productRepository.save(product);
@@ -145,6 +148,7 @@ public class ProductService {
     public void changeCity(Product product, String newCity){
         product.setCity(newCity);
         ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
+        product.setActive(false);
         productAdminInfo.setModerate(false);
         productAdminInfoService.saveProductAdminInfo(productAdminInfo);
         productRepository.save(product);
@@ -153,6 +157,7 @@ public class ProductService {
     public void changeDescription(Product product, String newDescription){
         product.setDescription(newDescription);
         ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
+        product.setActive(false);
         productAdminInfo.setModerate(false);
         productAdminInfoService.saveProductAdminInfo(productAdminInfo);
         productRepository.save(product);
@@ -164,7 +169,7 @@ public class ProductService {
         Image  image3;
         List<Image> productImages = product.getImages();
         imageService.deleteImages(productImages);
-        productImages.removeAll(productImages);
+        productImages.clear();
         if(file1.getSize() != 0){
             image1 = imageService.toImageEntity(file1);
             image1.setPreviewImage(true);
@@ -179,9 +184,12 @@ public class ProductService {
             product.addImageToProduct(image3);
         }
 
-        ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
-        productAdminInfo.setModerate(false);
-        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
+
+        product.setActive(false);
+        product.getProductAdminInfo().setModerate(false);
+        Product productFromDb = productRepository.save(product);
+        productFromDb.setImages(productImages);
+        productFromDb.setPreviewImageId(productFromDb.getImages().get(0).getId());
         productRepository.save(product);
     }
 }
