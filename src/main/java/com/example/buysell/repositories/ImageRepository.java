@@ -1,12 +1,16 @@
 package com.example.buysell.repositories;
 
 import com.example.buysell.models.Image;
-import com.sun.mail.imap.protocol.ID;
-import org.springframework.data.jpa.repository.JpaRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-
-import java.util.List;
+import org.springframework.data.repository.query.Param;
 
 public interface ImageRepository extends CrudRepository<Image, Long> {
-    void deleteByIdIn(List<Long> ids);
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Image i WHERE i.id = :imageId")
+    void myDeleteById(@Param("imageId") Long imageId);
+
 }

@@ -12,8 +12,9 @@ import java.util.Objects;
 public class ProductAdminInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productAdminInfo_sequence")
+    @SequenceGenerator(name = "productAdminInfo_sequence", sequenceName = "productAdminInfo_sequence", allocationSize = 1)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)

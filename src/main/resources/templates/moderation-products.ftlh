@@ -3,7 +3,7 @@
     <hr>
     <div class="card-columns">
         <#list products as product>
-            <a href="/moderation/product/${product.id}" class="product-link">
+            <a href="/admin/moderation/product/${product.id}" class="product-link">
                 <div class="card text-white bg-dark my-3 product">
 
                     <img src="/images/${product.previewImageId}"

@@ -3,6 +3,16 @@
     transform: scale(1.02);
 }
 
+.my-custom-carousel {
+    width: 100%;
+    height: 500px;
+}
+
+.product-image-carousel {
+    width: auto;
+    height: 420px;
+}
+
 .product-link {
     color: #000 !important;
     text-decoration: none

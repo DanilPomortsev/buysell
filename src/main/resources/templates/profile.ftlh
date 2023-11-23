@@ -25,7 +25,7 @@
             <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/admin">
                 Панель администратора
             </a><br>
-            <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/moderation">
+            <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/admin/moderation">
                 Модерация объявлений
             </a><br>
         </#if>

@@ -21,12 +21,10 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class AdminController {
     private final UserService userService;
     private final AuthService authService;
     private final AdminService adminService;
-
     private final ProductService productService;
 
     @GetMapping("/admin")
@@ -36,14 +34,14 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping("/moderation")
+    @GetMapping("/admin/moderation")
     public String moderation(Model model, Principal principal) {
         model.addAttribute("products", productService.listUnpmoderateProducts());
         model.addAttribute("user", authService.getUserByPrincipal(principal));
         return "moderation-products";
     }
 
-    @GetMapping("/moderation/product/{id}")
+    @GetMapping("/admin/moderation/product/{id}")
     public String moderation(@PathVariable Long id, Model model, Principal principal) {
         User user = authService.getUserByPrincipal(principal);
         Product product = productService.getProductById(id);
@@ -53,7 +51,7 @@ public class AdminController {
         return "moderate-product-info";
     }
 
-    @PostMapping("/moderation/product/{id}")
+    @PostMapping("/admin/moderation/product/{id}")
     public String moderation(@PathVariable Long id, Model model, Principal principal,
                              @RequestParam(name = "moderateResult") Boolean moderateResult,
                              @RequestParam(name = "deactivateReason", required = false) String deactivateReason) {
@@ -62,27 +60,8 @@ public class AdminController {
             productService.successfulModerate(product);
         }
         else {
-            productService.unsuccessfulModerate(product,deactivateReason);
+            adminService.unsuccessfulModerate(product,deactivateReason);
         }
-        return "redirect:/moderation";
-    }
-
-    @PostMapping("/admin/user/ban/{id}")
-    public String userBan(@PathVariable("id") Long id) {
-        adminService.banUser(id);
-        return "redirect:/admin";
-    }
-
-    @GetMapping("/admin/user/edit/{user}")
-    public String userEdit(@PathVariable("user") User user, Model model) {
-        model.addAttribute("user", user);
-        model.addAttribute("roles", Role.values());
-        return "user-edit";
-    }
-
-    @PostMapping("/admin/user/edit")
-    public String userEdit(@RequestParam("userId") User user, @RequestParam Map<String, String> form) {
-        adminService.changeUserRoles(user, form);
-        return "redirect:/admin";
+        return "redirect:/admin/moderation";
     }
 }

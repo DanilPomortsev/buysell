@@ -39,6 +39,9 @@
     <p><h1 style="text-align: center">${product.title} | ${product.price} ₽</h1></p>
     <p style="text-align: center">${product.description}</p>
     <p style="text-align: center">Номер телефона продавца: <b>${product.user.sellerData.phone}</b></p>
+    <p style="text-align: center">Дата создания объявления: ${product.dateOfCreated}</b></p>
+    <p style="text-align: center">Дата последнего обновления объявления: ${product.dateOfLastChanging}</b></p>
+
 
     <hr>
     <p style="text-align: center">
@@ -59,7 +62,7 @@
             Блокировать объявление
     </a>
     <div class="collapse mb-3" id="collapseExample" style="">
-        <form action="/moderation/product/${product.id}?moderateResult=false" method="post" enctype="multipart/form-data">
+        <form action="/admin/moderation/product/${product.id}?moderateResult=false" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="productName">Причина блокировки</label>
                 <input type="text" required class="form-control"
@@ -71,7 +74,7 @@
         </form>
     </div>
 
-    <form action="/moderation/product/${product.id}?moderateResult=true" method="post">
+    <form action="/admin/moderation/product/${product.id}?moderateResult=true" method="post">
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         <button type="submit" style="width: 100%" class="btn btn-dark">Пропустить</button>
     </form>

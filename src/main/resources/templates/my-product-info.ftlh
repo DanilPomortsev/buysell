@@ -1,6 +1,6 @@
 <#import "blocks/template.ftlh" as t>
 <@t.template user>
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <div id="myCarousel" class="carousel slide my-custom-carousel" data-ride="carousel">
         <ol class="carousel-indicators">
             <#list images as image>
                 <li data-target="#myCarousel" data-slide-to="0" class=""></li>
@@ -9,7 +9,7 @@
         <div class="carousel-inner">
             <#list images as image>
                 <div class="carousel-item <#if image.previewImage>active</#if>">
-                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                    <svg class="bd-placeholder-img" width="100%" height="500" xmlns="http://www.w3.org/2000/svg"
                          role="img" aria-label=" :  " preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title></title>
                         <rect width="100%" height="100%" fill="#777"></rect>
@@ -19,7 +19,7 @@
                     <div class="container">
                         <div class="carousel-caption">
                             <a href="/images/${image.id}">
-                                <img class="product" style="height: 100px" src="/images/${image.id}">
+                                <img class="product-image-carousel" src="/images/${image.id}">
                             </a>
                         </div>
                     </div>
@@ -38,6 +38,8 @@
     <hr>
     <p><h1 style="text-align: center">${product.title} | ${product.price} ₽</h1></p>
     <p style="text-align: center">${product.description}</p>
+    <p style="text-align: center">Дата создания объявления: ${product.dateOfCreated}</b></p>
+    <p style="text-align: center">Дата последнего обновления объявления: ${product.dateOfLastChanging}</b></p>
 
     <#if product.isNotModerating()>
         <h style="text-align: center">Объявление находится на этапе модерации, подождите пока администратор проверит ваше объявление</h><hr>

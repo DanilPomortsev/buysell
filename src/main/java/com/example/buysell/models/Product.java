@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,8 +18,9 @@ import java.util.Objects;
 @NoArgsConstructor
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_sequence")
+    @SequenceGenerator(name = "product_sequence", sequenceName = "product_sequence", allocationSize = 1)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @Column(name = "title")
@@ -40,7 +42,15 @@ public class Product {
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
-    private LocalDateTime dateOfCreated;
+
+
+    @Column(name = "date_of_creating")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfCreated;
+
+    @Column(name = "date_of_last_changing")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfLastChanging;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "likes")
     private List<User> userLike;
@@ -56,7 +66,8 @@ public class Product {
 
     @PrePersist
     private void init() {
-        dateOfCreated = LocalDateTime.now();
+        dateOfLastChanging = new Date();
+        dateOfCreated = new Date();
     }
 
 

@@ -18,8 +18,8 @@
 
                     <div class="container">
                         <div class="carousel-caption">
-                            <a href="/images/${image.id}">
-                                <img class="product" style="height: 100px" src="/images/${image.id}">
+                            <a href="/images/${encodeURIComponent(image.id)}">
+                                <img class="product" style="height: 100px" src="/images/${encodeURIComponent(image.id)}">
                             </a>
                         </div>
                     </div>
@@ -39,6 +39,8 @@
     <p><h1 style="text-align: center">${product.title} | ${product.price} ₽</h1></p>
     <p style="text-align: center">${product.description}</p>
     <p style="text-align: center">Номер телефона продавца: <b>${product.user.sellerData.phone}</b></p>
+    <p style="text-align: center">Дата создания объявления: ${product.dateOfCreated}</b></p>
+    <p style="text-align: center">Дата последнего обновления объявления: ${product.dateOfLastChanging}</b></p>
 
     <hr>
     <p style="text-align: center">

@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,9 +48,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void unsuccessfulModerate(Product product, String adminMessage){
-        productAdminInfoService.deactivateProduct(product.getProductAdminInfo(), adminMessage);
-        product.setActive(false);
+    public void save(Product product){
         productRepository.save(product);
     }
 
@@ -77,13 +76,12 @@ public class ProductService {
         product.setActive(false);
         product.setProductAdminInfo(productAdminInfo);
         log.info("Saving new Product. Title: {}; Author email: {}", product.getTitle(), product.getUser().getEmail());
-        Product productFromDb = productRepository.save(product);
-        productFromDb.setPreviewImageId(productFromDb.getImages().get(0).getId());
-        productRepository.save(product);
-
+        product = productRepository.save(product);
         productAdminInfo.setProduct(product);
         productAdminInfo.setModerate(false);
-        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
+        product.setPreviewImageId(product.getImages().get(0).getId());
+        productRepository.save(product);
+
     }
 
     public void deleteProduct(Long id) {
@@ -132,7 +130,8 @@ public class ProductService {
         ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
         product.setActive(false);
         productAdminInfo.setModerate(false);
-        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
+        product.setDateOfLastChanging(new Date());
+        productAdminInfoService.save(productAdminInfo);
         productRepository.save(product);
     }
 
@@ -141,7 +140,8 @@ public class ProductService {
         ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
         product.setActive(false);
         productAdminInfo.setModerate(false);
-        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
+        product.setDateOfLastChanging(new Date());
+        productAdminInfoService.save(productAdminInfo);
         productRepository.save(product);
     }
 
@@ -150,7 +150,8 @@ public class ProductService {
         ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
         product.setActive(false);
         productAdminInfo.setModerate(false);
-        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
+        product.setDateOfLastChanging(new Date());
+        productAdminInfoService.save(productAdminInfo);
         productRepository.save(product);
     }
 
@@ -159,7 +160,8 @@ public class ProductService {
         ProductAdminInfo productAdminInfo = product.getProductAdminInfo();
         product.setActive(false);
         productAdminInfo.setModerate(false);
-        productAdminInfoService.saveProductAdminInfo(productAdminInfo);
+        product.setDateOfLastChanging(new Date());
+        productAdminInfoService.save(productAdminInfo);
         productRepository.save(product);
     }
 
@@ -189,6 +191,7 @@ public class ProductService {
         product.getProductAdminInfo().setModerate(false);
         Product productFromDb = productRepository.save(product);
         productFromDb.setImages(productImages);
+        product.setDateOfLastChanging(new Date());
         productFromDb.setPreviewImageId(productFromDb.getImages().get(0).getId());
         productRepository.save(product);
     }

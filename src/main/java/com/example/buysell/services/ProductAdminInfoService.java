@@ -16,14 +16,8 @@ import java.util.Date;
 public class ProductAdminInfoService {
     private final ProductAdminInfoRepository productAdminInfoRepository;
 
-    public void deactivateProduct(ProductAdminInfo productAdminInfo, String adminMessage){
-        productAdminInfo.setModerate(true);
-        productAdminInfo.setDeactivateReason(adminMessage);
-        productAdminInfo.setDateDeactivate(new Date());
-        productAdminInfoRepository.save(productAdminInfo);
-    }
 
-    public void saveProductAdminInfo(ProductAdminInfo productAdminInfo){
+    public void save(ProductAdminInfo productAdminInfo){
         productAdminInfoRepository.save(productAdminInfo);
     }
 }

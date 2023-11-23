@@ -10,8 +10,9 @@ import java.util.Objects;
 @Data
 public class SellerData {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sellerData_sequence")
+    @SequenceGenerator(name = "sellerData_sequence", sequenceName = "sellerData_sequence", allocationSize = 1)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @Column(name = "phone")

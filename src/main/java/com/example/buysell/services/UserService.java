@@ -2,9 +2,11 @@ package com.example.buysell.services;
 
 import com.example.buysell.models.Image;
 import com.example.buysell.models.Product;
+import com.example.buysell.models.ProductAdminInfo;
 import com.example.buysell.models.User;
 import com.example.buysell.models.enums.Role;
 import com.example.buysell.repositories.ImageRepository;
+import com.example.buysell.repositories.ProductRepository;
 import com.example.buysell.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
 
 @Service
@@ -23,17 +26,14 @@ public class UserService {
     private final ProductService productService;
     private final ImageRepository imageRepository;
     private final PasswordEncoder passwordEncoder;
-
     public boolean createUser(User user){
         String email = user.getEmail();
-        if(userRepository.findByEmail(email) != null) return false;
+        if(userRepository.findByEmail(email).isPresent()) return false;
         user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setPassword(user.getPassword());
         user.getRoles().add(Role.ROLE_USER);
-        user.getRoles().add(Role.ROLE_ADMIN);
         log.info("Saving new User with email: {}", email);
-        userRepository.save(user);
         return true;
     }
 
@@ -89,6 +89,10 @@ public class UserService {
 
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     public void save(User user) {

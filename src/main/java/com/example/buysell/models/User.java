@@ -14,8 +14,9 @@ import java.util.*;
 @Data
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
     @Column(name = "email", unique = true)
     private String email;
