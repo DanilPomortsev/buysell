@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MainAdminService {
     private final UserService userService;
-
-    private final ProductService productService;
     private final AdminService adminService;
 
     public void banUser(Long id) {

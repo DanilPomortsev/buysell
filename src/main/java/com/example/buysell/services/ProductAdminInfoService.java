@@ -15,8 +15,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class ProductAdminInfoService {
     private final ProductAdminInfoRepository productAdminInfoRepository;
-
-
     public void save(ProductAdminInfo productAdminInfo){
         productAdminInfoRepository.save(productAdminInfo);
     }
