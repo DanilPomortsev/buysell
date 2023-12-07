@@ -21,6 +21,14 @@ public class User implements UserDetails {
     @Column(name = "email", unique = true)
     private String email;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "product_like",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> likes = new ArrayList<>();
+
     @Column(name = "name")
     private String name;
     @Column(name = "active")
@@ -46,15 +54,6 @@ public class User implements UserDetails {
             fetch = FetchType.LAZY
     )
     private SellerData sellerData;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "product_like",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> likes = new ArrayList<>();
-
 
     @PrePersist
     private void init() {

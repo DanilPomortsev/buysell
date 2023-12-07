@@ -1,9 +1,11 @@
-FROM openjdk:19
+FROM maven:3.8-openjdk-17
+
+ADD . /src
+
+WORKDIR /src
+
+RUN mvn clean package -DskipTests
 
 EXPOSE 8080
 
-EXPOSE 5432
-
-ADD target/buysell.jar buysell.jar
-
-ENTRYPOINT ["java", "-jar", "buysell.jar"]
+ENTRYPOINT ["java", "-jar", "target/buysell.jar"]

@@ -15,7 +15,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,7 +29,7 @@ public class ProductService {
     private final AuthService authService;
     public List<Product> listProducts(String title) {
         if (title != null) return productRepository.findByTitle(title);
-        return productRepository.findAll();
+        return (List<Product>) productRepository.findAll();
     }
 
     public List<Product> listActiveProducts(String title) {

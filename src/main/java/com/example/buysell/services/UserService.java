@@ -2,11 +2,9 @@ package com.example.buysell.services;
 
 import com.example.buysell.models.Image;
 import com.example.buysell.models.Product;
-import com.example.buysell.models.ProductAdminInfo;
 import com.example.buysell.models.User;
 import com.example.buysell.models.enums.Role;
 import com.example.buysell.repositories.ImageRepository;
-import com.example.buysell.repositories.ProductRepository;
 import com.example.buysell.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.*;
 
 @Service
@@ -39,7 +36,7 @@ public class UserService {
     }
 
     public List<User> list() {
-        return userRepository.findAll();
+        return (List<User>) userRepository.findAll();
     }
 
     public List<Product> getListOfLikedProduct(User user){
@@ -80,12 +77,10 @@ public class UserService {
         return productService.isLikeExists(user, productId);
     }
 
-    public boolean deleteIfExistsLike(User user,Long productId){
+    public void deleteIfExistsLike(User user, Long productId){
         if(productService.isLikeExists(user,productId)){
             productService.deleteUserLike(user,productId);
-            return true;
         }
-        return false;
     }
 
     public User findById(Long id) {
