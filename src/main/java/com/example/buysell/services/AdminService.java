@@ -22,12 +22,6 @@ public class AdminService {
         productAdminInfoService.save(productAdminInfo);
     }
 
-    public void successfulModerate(Product product){
-        product.getProductAdminInfo().setModerate(true);
-        product.setActive(true);
-        productService.save(product);
-    }
-
     public void unsuccessfulModerate(Product product, String adminMessage){
         deactivateProduct(product.getProductAdminInfo(), adminMessage);
         product.setActive(false);
