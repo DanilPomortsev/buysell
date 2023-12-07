@@ -128,7 +128,7 @@
 
 
 ## Схема базы данных
-![Логотип](DataBaseScheme.png)
+![Логотип](https://i.imgur.com/JibEdBY.png)
 
 
 # Тестирование: 
