@@ -1,6 +1,8 @@
 package com.example.buysell.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,12 +24,15 @@ public class Product {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
+    @Size(min= 5, max = 100,message = "Название товара должно обладать длиной от 5 до 100 символов")
     @Column(name = "title")
     private String title;
 
+    @Size(min= 20, max = 10000,message = "Название товара должно обладать длиной от 20 до 10000 символов")
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
+    @Positive(message = "Должно быть положительным числом")
     @Column(name = "price")
     private int price;
 

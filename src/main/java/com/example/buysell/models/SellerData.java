@@ -1,6 +1,8 @@
 package com.example.buysell.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.Objects;
@@ -15,12 +17,15 @@ public class SellerData {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
+    @Pattern(regexp = "^\\+7\\d{10}$", message = "не коректно введён ноиер телефона. Пример: +79124959810")
     @Column(name = "phone")
     private String phone;
 
+    @Size(min= 5, max = 100,message = "Адресс должен обладать длиной от 5 до 100 символов")
     @Column(name = "address")
     private String address;
 
+    @Size(min= 5, max = 100,message = "Контактная ссылка должна обладать длиной от 5 до 100 символов")
     @Column(name = "contact")
     private String contact;
 

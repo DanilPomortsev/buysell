@@ -1,15 +1,16 @@
 package com.example.buysell.controllers;
 
-import com.example.buysell.endpoints.SellerDataEndpoint;
 import com.example.buysell.models.Product;
+import com.example.buysell.models.SellerData;
 import com.example.buysell.models.User;
 import com.example.buysell.services.AuthService;
 import com.example.buysell.services.ProductService;
 import com.example.buysell.services.SellerService;
-import com.example.buysell.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,10 +25,14 @@ public class SellerController {
     private final ProductService productService;
 
     @PostMapping("/seller-data")
-    public String sendSellerData(SellerDataEndpoint sellerData, Principal principal, Model model){
+    public String sendSellerData(Principal principal, Model model, @Valid SellerData sellerData, Errors errors){
         User user = authService.getUserByPrincipal(principal);
-        sellerService.becomeSeller(user, sellerData);
         model.addAttribute("user",user);
+        if(errors.hasErrors()){
+            model.addAttribute("errors", errors);
+            return "seller-data";
+        }
+        sellerService.becomeSeller(user, sellerData);
         return "redirect:/profile";
     }
 

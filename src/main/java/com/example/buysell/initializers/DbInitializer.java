@@ -36,7 +36,7 @@ public class DbInitializer {
 
             mainAdmin.setEmail(email);
 
-            mainAdmin.setPassword(passwordEncoder.encode("gzznybwf1331"));
+            mainAdmin.setPassword(passwordEncoder.encode("Abcdefg1!"));
 
             mainAdmin.setName("Данил");
 

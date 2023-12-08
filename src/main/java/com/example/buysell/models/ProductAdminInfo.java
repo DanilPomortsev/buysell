@@ -1,6 +1,7 @@
 package com.example.buysell.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.Date;

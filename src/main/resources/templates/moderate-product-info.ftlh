@@ -63,10 +63,20 @@
     </a>
     <div class="collapse mb-3" id="collapseExample" style="">
         <form action="/admin/moderation/product/${product.id}?moderateResult=false" method="post" enctype="multipart/form-data">
+            <#if errors??>
+                <p style="color: red">Товар не был промодерирован, чтобы посмотреть подробности нажмите на кнопку</p>
+            </#if>
             <div class="form-group">
                 <label for="productName">Причина блокировки</label>
                 <input type="text" required class="form-control"
                        id="productName" name="deactivateReason">
+                <#if errors??>
+                    <#if errors.hasFieldErrors("deactivateReason")>
+                        <#list errors.getFieldErrors("deactivateReason") as error>
+                            <p style="color: red">${error.defaultMessage}</p>
+                        </#list>
+                    </#if>
+                </#if>
             </div>
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 

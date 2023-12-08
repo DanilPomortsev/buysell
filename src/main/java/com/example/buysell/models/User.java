@@ -2,6 +2,9 @@ package com.example.buysell.models;
 
 import com.example.buysell.models.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +21,9 @@ public class User implements UserDetails {
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
+
+    @Email(message = "Должно являться электронной почтой")
+    @Size(max = 100, message = "максимальная длина 100 символов")
     @Column(name = "email", unique = true)
     private String email;
 
@@ -29,6 +35,7 @@ public class User implements UserDetails {
     )
     private List<Product> likes = new ArrayList<>();
 
+    @Size(min = 2, max = 100, message = "длина от 2 до 100 символов")
     @Column(name = "name")
     private String name;
     @Column(name = "active")
@@ -37,7 +44,8 @@ public class User implements UserDetails {
     @JoinColumn(name = "image_id")
     private Image avatar;
 
-    @Column(name = "password", length = 1000)
+    @Size(min = 8, max = 100, message = "Длина пароля от 8 до 100 символов")
+    @Column(name = "password", length = 100)
     private String password;
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",

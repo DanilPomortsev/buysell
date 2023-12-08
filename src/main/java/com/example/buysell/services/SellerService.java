@@ -1,6 +1,5 @@
 package com.example.buysell.services;
 
-import com.example.buysell.endpoints.SellerDataEndpoint;
 import com.example.buysell.models.SellerData;
 import com.example.buysell.models.User;
 import com.example.buysell.models.enums.Role;
@@ -18,7 +17,7 @@ public class SellerService {
 
     private final UserService userService;
 
-    public void becomeSeller(User user, SellerDataEndpoint sellerData){
+    public void becomeSeller(User user, SellerData sellerData){
         SellerData sellerDataDB;
         if(user.isSeller()){
             sellerDataDB = sellerDataRepository.findByUser(user);

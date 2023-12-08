@@ -2,6 +2,9 @@
 <@t.template user>
     <h1 style="text-align: center">Мои товары</h1>
     <hr>
+    <#if errors??>
+        <p style="color: red">Товар не был добавлен, были введены неверные данные, чтобы посмотреть подробности нажмите на кнопку</p>
+    </#if>
     <a class="btn btn-dark mt-3 mb-3" style="text-align: center; width: 100%"
        data-toggle="collapse" href="#collapseExample" role="button"
        aria-expanded="true" aria-controls="collapseExample">
@@ -11,8 +14,14 @@
         <form action="/product/create" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="productName">Название товара</label>
-                <input type="text" required class="form-control"
-                       id="productName" name="title">
+                <input type="text" required class="form-control" id="productName" name="title">
+                <#if errors??>
+                    <#if errors.hasFieldErrors("title")>
+                        <#list errors.getFieldErrors("title") as error>
+                            <p style="color: red">${error.defaultMessage}</p>
+                        </#list>
+                    </#if>
+                </#if>
             </div>
             <div class="form-group">
                 <label for="price">Цена товара</label>
@@ -22,6 +31,13 @@
                         <span class="input-group-text">₽</span>
                     </div>
                 </div>
+                <#if errors??>
+                    <#if errors.hasFieldErrors("price")>
+                        <#list errors.getFieldErrors("price") as error>
+                            <p style="color: red">${error.defaultMessage}</p>
+                        </#list>
+                    </#if>
+                </#if>
             </div>
             <div class="form-group">
                 <label for="searchCity">Город</label>
@@ -37,6 +53,13 @@
             <div class="form-group">
                 <label for="description">Описание товара</label>
                 <textarea required class="form-control" id="description" name="description"></textarea>
+                <#if errors??>
+                    <#if errors.hasFieldErrors("description")>
+                        <#list errors.getFieldErrors("description") as error>
+                            <p style="color: red">${error.defaultMessage}</p>
+                        </#list>
+                    </#if>
+                </#if>
             </div>
             <div class="form-group">
                 <div class="custom-file">
