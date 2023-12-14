@@ -40,10 +40,10 @@ public class MainAdminService {
                 Arrays.stream(Role.values())
                         .map(Role::name)
                         .collect(Collectors.toSet());
-        user.getRoles().clear();
         for (String key : form.keySet()) {
             if (roles.contains(key)) {
-                user.getRoles().add(Role.valueOf(key));
+                if(!user.getRoles().contains(Role.valueOf(key)))
+                    user.getRoles().add(Role.valueOf(key));
             }
         }
         userService.save(user);

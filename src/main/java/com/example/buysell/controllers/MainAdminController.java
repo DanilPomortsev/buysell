@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,7 +29,9 @@ public class MainAdminController {
     @GetMapping("/admin/user/edit/{user}")
     public String userEdit(@PathVariable("user") User user, Model model) {
         model.addAttribute("user", user);
-        model.addAttribute("roles", Role.values());
+        model.addAttribute("roles", Arrays.stream(Role.values()).filter((element) ->
+                element.equals(Role.valueOf("ROLE_ADMIN"))||element.equals(Role.valueOf("ROLE_MAINADMIN"))
+        ).collect(Collectors.toList()));
         return "user-edit";
     }
 

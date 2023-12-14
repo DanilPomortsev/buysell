@@ -21,10 +21,13 @@
             Контактная ссылка: <b>${user.sellerData.contact}</b><br>
         </#if>
         <br>
-        <#if user.isAdmin()>
+        <#if user.isSuperAdmin()>
             <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/admin">
                 Панель администратора
             </a><br>
+        </#if>
+
+        <#if user.isAdmin()>
             <a class="btn btn-dark my-3" style="text-align: center; width: 100%" href="/admin/moderation">
                 Модерация объявлений
             </a><br>

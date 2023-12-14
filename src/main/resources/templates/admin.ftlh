@@ -4,7 +4,6 @@
     <table class="table table-hover table-dark">
         <tr>
             <th scope="col">Email</th>
-            <th scope="col">Номер телефона</th>
             <th scope="col">Активность</th>
             <th scope="col">Роли</th>
             <th scope="col">Бан</th>
@@ -15,7 +14,7 @@
             <tr>
                 <th>${user.email}</th>
                 <th><#if user.active>true<#else>false</#if></th>
-                <th><#list user.roles as role>${role}</#list></th>
+                <th><#list user.roles as role>${role} </#list></th>
                 <th>
                     <form action="/admin/user/ban/${user.id}" method="post">
                         <input type="hidden" name="_csrf" value="${_csrf.token}">

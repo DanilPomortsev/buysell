@@ -74,6 +74,10 @@ public class User implements UserDetails {
         return roles.contains(Role.ROLE_ADMIN);
     }
 
+    public boolean isSuperAdmin() {
+        return roles.contains(Role.ROLE_MAINADMIN);
+    }
+
     public boolean isSeller() {
         return roles.contains(Role.ROLE_SELLER);
     }
