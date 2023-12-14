@@ -20,6 +20,9 @@ public class ImageService {
     public Image findById(Product product){
         return imageRepository.findById(product.getPreviewImageId()).orElse(null);
     }
+    public Image findById(Long id){
+        return imageRepository.findById(id).orElse(null);
+    }
 
     public Image toImageEntity(MultipartFile file) throws IOException {
         Image image = new Image();

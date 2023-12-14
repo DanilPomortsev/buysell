@@ -2,17 +2,13 @@ package com.example.buysell.controllers;
 
 import com.example.buysell.models.Product;
 import com.example.buysell.models.User;
-import com.example.buysell.models.enums.Role;
 import com.example.buysell.services.AdminService;
 import com.example.buysell.services.AuthService;
 import com.example.buysell.services.ProductService;
 import com.example.buysell.services.UserService;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

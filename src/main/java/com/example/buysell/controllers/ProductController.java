@@ -5,9 +5,11 @@ import com.example.buysell.models.User;
 import com.example.buysell.services.AuthService;
 import com.example.buysell.services.ProductService;
 import com.example.buysell.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,7 +61,14 @@ public class ProductController {
 
     @PostMapping("/product/create")
     public String createProduct(@RequestParam("file1") MultipartFile file1, @RequestParam("file2") MultipartFile file2
-            , @RequestParam("file3") MultipartFile file3, Product product, Principal principal) throws IOException {
+            , @RequestParam("file3") MultipartFile file3, @Valid Product product, Errors errors, Model model, Principal principal) throws IOException {
+        if(errors.hasErrors()){
+            model.addAttribute("errors", errors);
+            User user = authService.getUserByPrincipal(principal);
+            model.addAttribute("user", user);
+            model.addAttribute("products", user.getProducts());
+            return "my-products";
+        }
         productService.saveProduct(principal, product, file1, file2, file3);
         return "redirect:/my/products";
     }
