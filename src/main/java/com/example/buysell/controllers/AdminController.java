@@ -56,20 +56,7 @@ public class AdminController {
     @PostMapping("/admin/moderation/product/{id}")
     public String moderation(@PathVariable Long id, Model model, Principal principal,
                              @RequestParam(name = "moderateResult") Boolean moderateResult,
-                             @RequestParam(name = "deactivateReason", required = false)
-                             @Size(min=1, max=100, message="Deactivate reason must be between 1 and 100 characters")
-                             String deactivateReason,
-                             Errors errors)
-    {
-        if(errors.hasErrors()){
-            User user = authService.getUserByPrincipal(principal);
-            Product product = productService.getProductById(id);
-            model.addAttribute("user", user);
-            model.addAttribute("product", product);
-            model.addAttribute("images", product.getImages());
-            model.addAttribute("errors", errors);
-            return "moderate-product-info";
-        }
+                             @RequestParam(name = "deactivateReason", required = false) String deactivateReason) {
         Product product = productService.getProductById(id);
         if(moderateResult){
             productService.successfulModerate(product);
