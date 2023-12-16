@@ -33,7 +33,10 @@ public class ProductService {
     }
 
     public List<Product> listActiveProducts(String title) {
-        if (title != null) return productRepository.findByTitle(title);
+        if (title != null && !title.equals("")){
+            List<Product> list = productRepository.findByTitle(title);
+            return productRepository.findByTitle(title);
+        }
         return productRepository.findActiveProducts();
     }
 
